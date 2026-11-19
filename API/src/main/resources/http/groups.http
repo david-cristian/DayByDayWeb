@@ -1,0 +1,25 @@
+@baseUrl = http://localhost:8080/api/groups
+
+### Creare grup cu user 1 ca admin (va primi ID = 1)
+POST {{baseUrl}}/groups
+Content-Type: application/json
+
+{
+  "name": "Backend DayByDayPro",
+  "adminId": 1
+}
+
+### Adaugă user 2 ca membru în grupul 1
+POST {{baseUrl}}/groups/1/members/2
+
+### 4.3 Asignează task-ul 2 către grupul 1
+POST {{baseUrl}}/groups/1/tasks/2
+
+### 4.4 Verifică grupul 1 (trebuie să conțină membrii și task-ul asociat)
+GET {{baseUrl}}/groups/1
+
+### 4.5 Elimină task-ul 2 din grupul 1
+DELETE {{baseUrl}}/groups/1/tasks/2
+
+### 4.6 Elimină user 2 din grupul 1
+DELETE {{baseUrl}}/groups/1/members/2

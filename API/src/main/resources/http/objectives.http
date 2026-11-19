@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:8080/api/objectives
+
+### Creare objective 1 pt user1
+POST {{baseUrl}}/objectives
+Content-Type: application/json
+
+{
+  "title": "Lansare MVP DayByDayPro",
+  "description": "Finalizarea backend-ului Spring Boot si conectarea cu frontend-ul",
+  "dueDate": "2026-12-15T23:59:00",
+  "status": "IN_PROGRESS",
+  "ownerId": 1
+}
+
+### getAll user objectives
+GET {{baseUrl}}/objectives/user/1
+
+### findById
+GET {{baseUrl}}/objectives/1
+
+### Update objective
+PUT {{baseUrl}}/objectives/1
+Content-Type: application/json
+
+{
+  "title": "Lansare MVP DayByDayPro v1.0",
+  "description": "Include autentificare JWT si deploy",
+  "dueDate": "2026-12-20T23:59:00",
+  "status": "IN_PROGRESS"
+}
+

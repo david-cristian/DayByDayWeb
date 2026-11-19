@@ -1,0 +1,113 @@
+@startuml
+package Model {
+    abstract class Entity<ID> {
+        # ID id
+    }
+
+    class User extends Entity<Long> {
+        - String username
+        - String password
+        - String firstName
+        - String lastName
+        - String email
+    }
+
+    abstract class SchedulableEntity extends Entity<Long> {
+        # String title
+        # LocalDate dueDate
+        # String description
+        # Status status
+        # User owner
+    }
+
+    class Task extends SchedulableEntity {}
+
+    class Objective extends SchedulableEntity {}
+
+    class Group extends Entity<Long> {
+        - String name
+        - User admin
+        - List<User> users
+        - List<Task> tasks
+        - List<Objective> objectives
+
+        + addUser(User user): void
+        + removeUser(User user): void
+        + addTask(Task task): void
+        + removeTask(Task task): void
+    }
+
+    enum Status {
+        IN_PROGRESS
+        FINISHED
+    }
+}
+
+package Repository <<Spring Data JPA>> {
+    interface JpaRepository<T, ID> {
+        + save(entity: T): T
+        + deleteById(id: ID): void
+        + findById(id: ID): Optional<T>
+        + findAll(): List<T>
+    }
+
+    interface UserRepository {
+        + findByUsername(username: String): Optional<User>
+    }
+
+    interface TaskRepository {
+        + findByDueDate(date: LocalDate): List<Task>
+        + findByOwner(user: User): List<Task>
+    }
+
+    interface ObjectiveRepository {
+        + findByDueDate(date: LocalDate): List<Objective>
+        + findByOwner(user: User): List<Objective>
+    }
+
+    interface GroupRepository {
+        + findByName(name: String): List<Group>
+    }
+
+    UserRepository -up-|> JpaRepository : <<extends>>
+    TaskRepository -up-|> JpaRepository : <<extends>>
+    ObjectiveRepository -up-|> JpaRepository : <<extends>>
+    GroupRepository -up-|> JpaRepository : <<extends>>
+}
+
+package Service {
+    class UserService {
+        - UserRepository userRepo
+
+        + register(User user): User
+        + update(User user): User
+        + delete(Long id): void
+        + findById(Long id): User
+    }
+
+    class TaskService {
+        - TaskRepository taskRepo
+        - UserRepository userRepo
+
+        + create(Long userId, Task task): Task
+        + updateStatus(Long taskId, Status status): Task
+        + delete(Long id): void
+        + getPersonalTasks(Long userId): List<Task>
+    }
+
+    class GroupService {
+        - GroupRepository groupRepo
+        - UserRepository userRepo
+        - TaskRepository taskRepo
+
+        + createGroup(String name, Long adminId): Group
+        + addUserToGroup(Long groupId, Long userId): void
+        + removeUserFromGroup(Long groupId, Long userId): void
+        + addTaskToGroup(Long groupId, Long taskId): void
+    }
+}
+
+User "1" <-- "*" SchedulableEntity : owner
+Group "*" --> "*" User : members
+Group "1" --> "*" Task : group tasks
+@enduml

@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:8080/api/users
+
+### Register User 1
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "username": "andrei",
+  "password": "password123",
+  "firstName": "Andrei",
+  "lastName": "Popescu",
+  "email": "andrei@example.com"
+}
+
+### Register User 2
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "username": "maria",
+  "password": "password123",
+  "firstName": "Maria",
+  "lastName": "Ionescu",
+  "email": "maria@example.com"
+}
+
+### Login user
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "andrei",
+  "password": "password123"
+}
+
+### GetAll users
+GET {{baseUrl}}
+
+### findById
+GET {{baseUrl}}/1
+
+### Update user
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "firstName": "Andrei-Vlad",
+  "lastName": "Popescu",
+  "email": "andrei.vlad@example.com"
+}
+
+### Test validation BAD REQUEST
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": "123",
+  "firstName": "test",
+  "lastName": "user",
+  "email": "invalid email"
+}
+
+###
+DELETE {{baseUrl}}/1

@@ -1,0 +1,10 @@
+@baseUrl = http://localhost:8080/api
+
+### Ștergere task 2
+DELETE {{baseUrl}}/tasks/2
+
+### Ștergere obiectiv 1
+DELETE {{baseUrl}}/objectives/1
+
+### Ștergere user 2
+DELETE {{baseUrl}}/users/2

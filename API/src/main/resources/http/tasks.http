@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:8080/api/tasks
+
+### Create task 1 pentru user1
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Implementare controllere REST",
+  "description": "Finalizare endpoints pentru User, Task, Objective si Group",
+  "dueDate": "2026-11-25T18:00:00",
+  "status": "IN_PROGRESS",
+  "ownerId": 1
+}
+
+### Create task 2 pt user1
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Configurare JWT",
+  "description": "Adaugare filtru OncePerRequestFilter si JwtService",
+  "dueDate": "2026-11-28T12:00:00",
+  "status": "TODO",
+  "ownerId": 1
+}
+
+### getAll user task
+GET {{baseUrl}}/user/1
+
+### findById
+GET {{baseUrl}}/1
+
+### Update task (marcare ca DONE)
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "title": "Implementare controllere REST",
+  "description": "Testat complet din HTTP Client",
+  "dueDate": "2026-11-25T18:00:00",
+  "status": "DONE"
+}
+
+### Delete task2
+DELETE {{baseUrl}}/2
+

@@ -1,0 +1,67 @@
+@baseUrl = http://localhost:8080/api
+
+### 1. Creare User 1 (Adminul grupului - ID = 1)
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+  "username": "andreii",
+  "password": "password123",
+  "firstName": "Andrei",
+  "lastName": "Popescu",
+  "email": "andreii@example.com"
+}
+
+### 2. Creare User 2 (Utilizatorul invitat - ID = 2)
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+  "username": "mariaaa",
+  "password": "password123",
+  "firstName": "Maria",
+  "lastName": "Ionescu",
+  "email": "mariaa@example.com"
+}
+
+### 3. User 1 creează un grup (ID = 1)
+POST {{baseUrl}}/groups
+Content-Type: application/json
+
+{
+  "name": "Echipa DayByDayPro",
+  "adminId": 5
+}
+
+### 4. User 1 trimite invitație către User 2 în Grupul 1 (Invite ID = 1)
+POST {{baseUrl}}/groups/2/invites
+Content-Type: application/json
+
+{
+  "inviterId": 5,
+  "inviteeId": 6
+}
+
+### 5. Test validare: trimitere invitație duplicată (trebuie să dea eroare / 400)
+POST {{baseUrl}}/groups/2/invites
+Content-Type: application/json
+
+{
+  "inviterId": 5,
+  "inviteeId": 6
+}
+
+### 6. User 2 își verifică invitațiile PENDING (trebuie să apară invitația 1)
+GET {{baseUrl}}/users/6/invites
+
+### 7. Test validare: User 1 încearcă să accepte invitația lui User 2 (trebuie să dea eroare / 400)
+POST {{baseUrl}}/invites/1/accept?userId=5
+
+### 8. User 2 acceptă invitația 1 (trebuie să returneze 204 No Content)
+POST {{baseUrl}}/invites/1/accept?userId=6
+
+### 9. Verificare finală: User 2 apare în lista de membri ai Grupului 1
+GET {{baseUrl}}/groups/2
+
+### 10. Verificare: Lista de invitații PENDING a lui User 2 este acum goală ([])
+GET {{baseUrl}}/users/6/invites

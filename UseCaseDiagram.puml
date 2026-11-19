@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+
+actor User as U
+actor System as Sys <<System>>
+
+rectangle "DayByDay+ System" {
+    ' Personal Actions
+    usecase "CRUD task" as crud_task
+    usecase "CRUD objective" as crud_obj
+    usecase "See schedule (Day/Week/Month)" as view_task
+    usecase "Mark personal item as Done" as done_task
+
+    ' System Automated Actions
+    usecase "Trigger Due Date Check" as trigger_check
+    usecase "Send Deadline Notification" as notify_user
+
+    ' Account Actions
+    usecase "Manage Account (Login/Register)" as user_actions
+
+    ' Group/Board Actions
+    usecase "Create Group Dashboard" as create_board
+    usecase "Invite Users to Dashboard" as invite
+    usecase "CRUD tasks/objectives inside Group" as crud_group
+    usecase "Mark Group Task as Done" as mark_done_group
+    usecase "Notify Group Members" as nt_us_board
+}
+
+' User directly initiates these independent actions
+U --> user_actions
+U --> crud_task
+U --> crud_obj
+U --> view_task
+U --> done_task
+
+U --> create_board
+U --> invite
+U --> crud_group
+U --> mark_done_group
+
+' System background processes
+Sys --> trigger_check
+trigger_check ..> notify_user : <<includes>>
+
+' Marking a group task as done automatically triggers the system to notify others
+mark_done_group ..> nt_us_board : <<includes>>
+
+' Notifications flow back to the user
+notify_user --> U : "Alerts (Due today)"
+nt_us_board --> U : "Alerts (Someone finished task)"
+@enduml
